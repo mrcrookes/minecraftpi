@@ -1,0 +1,74 @@
+from mcpi.minecraft import Minecraft
+from time import time
+
+mc = Minecraft.create()
+players = mc.getPlayerEntityIds()
+
+air = 0
+glass = 20
+wool = 35
+
+teamcolours = [13, 14]
+points = [0, 0]
+
+def buildPitch(mc):
+    
+    x, y, z = (0, 20, 0)
+    
+    mc.setBlocks(x - 5,
+                 y - 1,
+                 z - 10,
+                 x + 5,
+                 y + 3,
+                 z + 10,
+                 glass)
+    
+    mc.setBlocks(x - 4,
+                 y + 0,
+                 z - 9,
+                 x + 4,
+                 y + 3,
+                 z + 9,
+                 air)
+    
+def splatBlock(mc, x, y, z, team):
+    
+    pointsScored = [0, 0]
+    
+    otherTeam = 1 - team
+    
+    block, colour = mc.getBlockWithData(x, y, z)
+    
+    if block == glass:
+        mc.setBlock(x, y, z, wool, teamcolours[team])
+        pointsScored[team] += 1
+        
+    elif block == wool:
+        if colour == teamcolours[otherTeam]:
+            mc.setBlock(x, y, z, wool, teamcolours[team])
+            pointsScored[team] += 1
+            
+    return pointsScored
+
+buildPitch(mc)
+
+mc.player.setPos(0, 30, 0)
+
+start = time()
+
+while time() - start < 10:
+    
+    blockHits = mc.events.pollBlockHits()
+    
+    for hit in blockHits:
+        
+        team = players.index(hit.entityId) % 2
+        x, y , z = hit.pos
+        
+        pointsScored = splatBlock(mc, x, y, z, team)
+        
+        points[0] += pointsScored[0]
+        points[1] += pointsScored[1]
+               
+print(str(points[0]))
+print(str(points[1]))
