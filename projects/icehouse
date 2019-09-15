@@ -1,0 +1,41 @@
+from mcpi.minecraft import Minecraft
+
+mc = Minecraft.create()
+
+air = 0
+wool = 35
+ice = 79
+
+x, y, z = mc.player.getPos()
+
+mc.setBlocks(x + 1,
+             y,
+             z + 1,
+             x + 10,
+             y + 5,
+             z + 10,
+             ice)
+
+mc.setBlocks(x + 2,
+             y + 1,
+             z + 2,
+             x + 9,
+             y + 4,
+             z + 9,
+             air)
+
+mc.setBlocks(x + 5,
+             y + 1,
+             z + 1,
+             x + 6,
+             y + 3,
+             z + 1,
+             air)
+
+mc.setBlocks(x + 2,
+             y,
+             z + 2,
+             x + 9,
+             y,
+             z + 9,
+             wool, 14)
