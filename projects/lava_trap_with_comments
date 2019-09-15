@@ -1,0 +1,71 @@
+from mcpi.minecraft import Minecraft
+from time import time, sleep
+
+mc = Minecraft.create()
+
+# ids of useful blocks
+air = 0
+stone = 1
+lavaflow = 10
+lava = 11
+obsidian = 49
+
+# set values of x, y and z
+x, y, z = (0, 50, 0)
+
+# create stone 'bath' for lava
+mc.setBlocks(x - 12,
+             y,
+             z - 12,
+             x + 12,
+             y - 3,
+             z + 12,
+             stone)
+
+# pour in the lava
+mc.setBlocks(x - 10,
+             y,
+             z - 10,
+             x + 10,
+             y - 1,
+             z + 10,
+             lava)
+
+# create a stone in the centre as a starting position
+mc.setBlock(x, y, z, stone)
+
+# drop player onto starting position
+mc.player.setPos(0, 100, 0)
+
+# introduce game
+mc.postToChat("Welcome to the Lava Trap")
+mc.postToChat("Blocks under you will keep disappearing")
+sleep(1)
+
+# record time at the start of the game
+start = time()
+# create gameover variable
+gameover = False
+
+# loop while time is less than 10 seconds and gameover condition not met
+while time() - start < 10 and gameover == False:
+    
+    # get player position and block at this position
+    x, y, z = mc.player.getPos()
+    block = mc.getBlock(x, y, z)
+    
+    # after a warning of obsidian make the block underneath player disappear 
+    mc.setBlock(x, y - 1, z, obsidian)
+    sleep(2)
+    mc.setBlock(x, y - 1, z, air)
+    sleep(0.5)
+    
+    # if the player is touching lava or flowing lava gameover!
+    if block == lava or block == lavaflow:
+        gameover = True
+
+# let the player know how they did
+if gameover:
+    mc.postToChat("Gameover")
+else:
+    mc.postToChat("You survived!")
