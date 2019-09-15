@@ -1,0 +1,58 @@
+from mcpi.minecraft import Minecraft
+
+mc = Minecraft.create()
+
+air = 0
+tnt = 46
+torch = 50
+diamond = 57
+base = 95
+
+x, y, z = (0, 0, 0)
+zteleport = -40
+
+mc.setBlocks(x - 3,
+             y + 20,
+             z + 3,
+             x + 3,
+             y - 10,
+             z - 100,
+             air)
+
+mc.setBlocks(x,
+             y - 1,
+             z,
+             x,
+             y - 7,
+             z - 91,
+             base)
+
+mc.setBlocks(x,
+             y,
+             z,
+             x,
+             y,
+             z - 86,
+             tnt, 1)
+
+mc.setBlocks(x - 2,
+             y,
+             z - 93,
+             x + 2,
+             y,
+             z - 97,
+             diamond)
+
+mc.setBlock(x, y + 1, z - 95, torch)
+
+mc.setBlock(x, y + 4, zteleport, diamond)
+
+mc.player.setPos(0, 2, 0)
+
+while True:
+    x, y, z = mc.player.getPos()
+    z = round(z)
+    
+    if z == zteleport:
+        mc.player.setPos(x, y, z - 14)
+        break
