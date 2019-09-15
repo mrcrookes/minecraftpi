@@ -15,7 +15,7 @@ blue = 11
 brown = 12
 red = 14
 
-planets = {
+planetDiameters = {
     "Mercury": 1,
     "Venus": 2.25,
     "Earth": 2.5,
@@ -73,6 +73,6 @@ def buildPlanet(diameter, colour):
     
     sleep(2)
         
-for i in planets:
+for i in planetDiameters:
     mc.postToChat(i)
     buildPlanet(planets[i], planetColours[i])
