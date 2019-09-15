@@ -1,0 +1,15 @@
+from mcpi.minecraft import Minecraft
+from time import sleep
+
+mc = Minecraft.create()
+
+snow = 78
+ice = 79
+
+while True:
+    x, y, z = mc.player.getPos()
+    mc.setBlock(x, y, z, snow)
+    
+    for hit in mc.events.pollBlockHits():
+        x, y, z = hit.pos
+        mc.setBlock(x, y, z, ice)
