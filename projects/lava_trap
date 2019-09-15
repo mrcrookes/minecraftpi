@@ -1,0 +1,57 @@
+from mcpi.minecraft import Minecraft
+from time import time, sleep
+
+mc = Minecraft.create()
+
+air = 0
+stone = 1
+lavaflow = 10
+lava = 11
+obsidian = 49
+
+x, y, z = (0, 50, 0)
+
+mc.setBlocks(x - 12,
+             y,
+             z - 12,
+             x + 12,
+             y - 3,
+             z + 12,
+             stone)
+
+mc.setBlocks(x - 10,
+             y,
+             z - 10,
+             x + 10,
+             y - 1,
+             z + 10,
+             lava)
+
+mc.setBlock(x, y, z, stone)
+
+mc.player.setPos(0, 100, 0)
+
+mc.postToChat("Welcome to the Lava Trap")
+mc.postToChat("Blocks under you will keep disappearing")
+sleep(1)
+
+start = time()
+gameover = False
+
+while time() - start < 10 and gameover == False:
+    
+    x, y, z = mc.player.getPos()
+    block = mc.getBlock(x, y, z)
+    
+    mc.setBlock(x, y - 1, z, obsidian)
+    sleep(2)
+    mc.setBlock(x, y - 1, z, air)
+    sleep(0.5)
+    
+    if block == lava or block == lavaflow:
+        gameover = True
+
+if gameover:
+    mc.postToChat("Gameover")
+else:
+    mc.postToChat("You survived!")
