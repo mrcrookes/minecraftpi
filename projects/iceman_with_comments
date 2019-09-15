@@ -9,7 +9,7 @@ ice = 79
 
 # start a loop
 while True:
-    # get player position and save in variables x, y, z
+    # get player position and store in variables x, y, z
     x, y, z = mc.player.getPos()
     # set block at players position to be snow
     mc.setBlock(x, y, z, snow)
