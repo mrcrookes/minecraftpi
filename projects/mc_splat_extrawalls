@@ -1,12 +1,15 @@
 from mcpi.minecraft import Minecraft
+from time import time
 
 mc = Minecraft.create()
+players = mc.getPlayerEntityIds()
 
 air = 0
 glass = 20
 wool = 35
 
 teamcolours = [13, 14]
+points = [0, 0]
 
 def buildPitch(mc):
     
@@ -27,7 +30,8 @@ def buildPitch(mc):
                  y + 3,
                  z + 9,
                  air)
-    
+                 
+                 
     mc.setBlocks(x + 0,
                  y + 0,
                  z - 7,
@@ -63,24 +67,19 @@ def splatBlock(mc, x, y, z, team):
             
     return pointsScored
 
-points = [0, 0]
-
-mc = Minecraft.create()
+buildPitch(mc)
 
 mc.player.setPos(0, 30, 0)
 
-buildPitch(mc)
-        
-players = mc.getPlayerEntityIds()
+start = time()
 
-for i in range(2500):
+while time() - start < 10:
     
     blockHits = mc.events.pollBlockHits()
     
     for hit in blockHits:
         
         team = players.index(hit.entityId) % 2
-        
         x, y , z = hit.pos
         
         pointsScored = splatBlock(mc, x, y, z, team)
