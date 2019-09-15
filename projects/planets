@@ -1,0 +1,78 @@
+from mcpi.minecraft import Minecraft
+from time import sleep
+
+mc = Minecraft.create()
+
+air = 0
+wool = 35
+
+orange = 1
+light_blue = 3
+yellow = 4
+light_grey = 8
+cyan = 9
+blue = 11
+brown = 12
+red = 14
+
+planets = {
+    "Mercury": 1,
+    "Venus": 2.25,
+    "Earth": 2.5,
+    "Mars": 1.25,
+    "Jupiter": 27.5,
+    "Saturn": 22.5,
+    "Uranus": 10,
+    "Neptune": 10,
+    "The Sun": 272.5}
+
+planetColours = {
+    "Mercury": light_grey,
+    "Venus": brown,
+    "Earth": light_blue,
+    "Mars": red,
+    "Jupiter": orange,
+    "Saturn": orange,
+    "Uranus": cyan,
+    "Neptune": blue,
+    "The Sun": yellow}
+
+mc.player.setPos(0, 0, 0)
+
+mc.setBlocks(150,
+             150,
+             150,
+             -150,
+             1,
+             -150,
+             air)
+
+def buildPlanet(diameter, colour):
+    
+    radius = diameter // 2
+
+    x, y, z = (radius + 5, radius + 5, 0)
+
+    mc.setBlocks(x + radius,
+                 y + radius,
+                 z + radius,
+                 x - radius,
+                 y - radius,
+                 z - radius,
+                 wool, colour)
+    
+    sleep(10)
+    
+    mc.setBlocks(x + radius,
+                 y + radius,
+                 z + radius,
+                 x - radius,
+                 y - radius,
+                 z - radius,
+                 air)
+    
+    sleep(2)
+        
+for i in planets:
+    mc.postToChat(i)
+    buildPlanet(planets[i], planetColours[i])
