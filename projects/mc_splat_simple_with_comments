@@ -1,0 +1,99 @@
+from mcpi.minecraft import Minecraft
+from time import time
+
+mc = Minecraft.create()
+
+# get a list of the players in server 
+players = mc.getPlayerEntityIds()
+
+# ids of useful blocks
+air = 0
+glass = 20
+wool = 35
+
+# create lists for team colours and points
+teamcolours = [13, 14]
+points = [0, 0]
+
+# create function to build glass pitch
+def buildPitch(mc):
+    
+    # give values to x, y and z
+    x, y, z = (0, 20, 0)
+    
+    # create cube of glass
+    mc.setBlocks(x - 5,
+                 y - 1,
+                 z - 10,
+                 x + 5,
+                 y + 3,
+                 z + 10,
+                 glass)
+    
+    # hollow out cube with air
+    mc.setBlocks(x - 4,
+                 y + 0,
+                 z - 9,
+                 x + 4,
+                 y + 3,
+                 z + 9,
+                 air)
+
+# create function to allow players to 'splat' blocks
+def splatBlock(mc, x, y, z, team):
+    
+    # create list to record scores
+    pointsScored = [0, 0]
+    
+    # define other team as 0 or 1
+    otherTeam = 1 - team
+    
+    # get block type and colour and store in variables block and colour
+    block, colour = mc.getBlockWithData(x, y, z)
+    
+    # if block is glass change colour to team's colour and + 1 score
+    if block == glass:
+        mc.setBlock(x, y, z, wool, teamcolours[team])
+        pointsScored[team] += 1
+    
+    # else if block is opponents colour change to this team's colour and + 1 score
+    elif block == wool:
+        if colour == teamcolours[otherTeam]:
+            mc.setBlock(x, y, z, wool, teamcolours[team])
+            pointsScored[team] += 1
+            
+    return pointsScored
+
+# call pitch building function
+buildPitch(mc)
+
+# set players position above the pitch
+mc.player.setPos(0, 30, 0)
+
+# record time at the start of the game
+start = time()
+
+# loop while game time is under 20 seconds
+while time() - start < 20:
+    
+    # get record of block hits and store in variable
+    blockHits = mc.events.pollBlockHits()
+    
+    # loop through hits
+    for hit in blockHits:
+        
+        # decide on player's team by looking if their id is odd or even
+        team = players.index(hit.entityId) % 2
+        
+        # get position of hit block and store in x, y, z
+        x, y , z = hit.pos
+        
+        # call spatBlock function with all info collected above
+        pointsScored = splatBlock(mc, x, y, z, team)
+        
+        # update overall team scores
+        points[0] += pointsScored[0]
+        points[1] += pointsScored[1]
+               
+mc.postToChat(str(points[0]))
+mc.postToChat(str(points[1]))
