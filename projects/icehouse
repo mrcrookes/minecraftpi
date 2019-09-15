@@ -2,12 +2,15 @@ from mcpi.minecraft import Minecraft
 
 mc = Minecraft.create()
 
+# ids of useful blocks
 air = 0
 wool = 35
 ice = 79
 
+# get player position
 x, y, z = mc.player.getPos()
 
+# create cube of ice
 mc.setBlocks(x + 1,
              y,
              z + 1,
@@ -16,6 +19,7 @@ mc.setBlocks(x + 1,
              z + 10,
              ice)
 
+# create cube of air inside ice
 mc.setBlocks(x + 2,
              y + 1,
              z + 2,
@@ -24,6 +28,7 @@ mc.setBlocks(x + 2,
              z + 9,
              air)
 
+# create cube of air at the front of the house (a door)
 mc.setBlocks(x + 5,
              y + 1,
              z + 1,
@@ -32,6 +37,7 @@ mc.setBlocks(x + 5,
              z + 1,
              air)
 
+# create a cube of wool on the floor of the house (a carpet)
 mc.setBlocks(x + 2,
              y,
              z + 2,
