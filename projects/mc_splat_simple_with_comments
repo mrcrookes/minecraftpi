@@ -70,6 +70,8 @@ buildPitch(mc)
 # set players position above the pitch
 mc.player.setPos(0, 30, 0)
 
+mc.postToChat("Start painting")
+
 # record time at the start of the game
 start = time()
 
@@ -95,5 +97,6 @@ while time() - start < 20:
         points[0] += pointsScored[0]
         points[1] += pointsScored[1]
                
+# post final scores
 mc.postToChat(str(points[0]))
 mc.postToChat(str(points[1]))
