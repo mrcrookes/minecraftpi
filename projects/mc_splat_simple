@@ -54,9 +54,11 @@ buildPitch(mc)
 
 mc.player.setPos(0, 30, 0)
 
+mc.postToChat("Start painting")
+
 start = time()
 
-while time() - start < 10:
+while time() - start < 20:
     
     blockHits = mc.events.pollBlockHits()
     
@@ -70,5 +72,5 @@ while time() - start < 10:
         points[0] += pointsScored[0]
         points[1] += pointsScored[1]
                
-print(str(points[0]))
-print(str(points[1]))
+mc.postToChat(str(points[0]))
+mc.postToChat(str(points[1]))
