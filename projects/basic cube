@@ -1,0 +1,15 @@
+from mcpi.minecraft import Minecraft
+
+mc = Minecraft.create()
+
+ice = 79
+
+x, y, z = mc.player.getPos()
+
+mc.setBlocks(x,
+             y,
+             z,
+             x + 6,
+             y + 4,
+             z + 6,
+             ice)
