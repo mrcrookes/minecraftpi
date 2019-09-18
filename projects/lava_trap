@@ -31,7 +31,6 @@ mc.setBlock(x, y, z, stone)
 
 mc.player.setPos(0, 100, 0)
 
-mc.postToChat("Blocks under you will keep disappearing")
 sleep(1)
 
 start = time()
