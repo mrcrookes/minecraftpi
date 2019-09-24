@@ -5,8 +5,8 @@ mc = Minecraft.create()
 
 stone = 1
 
-x,y,z = mc.player.getPos()
+x, y, z = mc.player.getPos()
 
 for i in range(50):
-  mc.setBlock(x+5, y+i, z, stone)
+  mc.setBlock(x + 5, y + i, z, stone)
   sleep(0.2)
