@@ -9,7 +9,7 @@ diamond = 57
 base = 95
 
 x, y, z = (0, 0, 0)
-zteleport = -40
+zteleport = -30
 
 mc.setBlocks(x - 3,
              y + 20,
@@ -54,5 +54,5 @@ while True:
     z = round(z)
     
     if z == zteleport:
-        mc.player.setPos(x, y, z - 14)
+        mc.player.setPos(x, y, z - 20)
         break
