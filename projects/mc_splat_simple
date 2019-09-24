@@ -12,7 +12,6 @@ teamcolours = [13, 14]
 points = [0, 0]
 
 def buildPitch(mc):
-    
     x, y, z = (0, 20, 0)
     
     mc.setBlocks(x - 5,
@@ -32,9 +31,7 @@ def buildPitch(mc):
                  air)
     
 def splatBlock(mc, x, y, z, team):
-    
     pointsScored = [0, 0]
-    
     otherTeam = 1 - team
     
     block, colour = mc.getBlockWithData(x, y, z)
@@ -51,9 +48,7 @@ def splatBlock(mc, x, y, z, team):
     return pointsScored
 
 buildPitch(mc)
-
 mc.player.setPos(0, 30, 0)
-
 mc.postToChat("Start painting")
 
 start = time()
@@ -63,12 +58,11 @@ while time() - start < 20:
     blockHits = mc.events.pollBlockHits()
     
     for hit in blockHits:
-        
         team = players.index(hit.entityId) % 2
         x, y , z = hit.pos
         
         pointsScored = splatBlock(mc, x, y, z, team)
-        
+ 
         points[0] += pointsScored[0]
         points[1] += pointsScored[1]
                
