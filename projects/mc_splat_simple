@@ -50,7 +50,6 @@ def splatBlock(mc, x, y, z, team):
 buildPitch(mc)
 mc.player.setPos(0, 30, 0)
 mc.postToChat("Start painting")
-
 start = time()
 
 while time() - start < 20:
