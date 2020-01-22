@@ -1,0 +1,169 @@
+from mcpi.minecraft import Minecraft
+mc = Minecraft.create()
+import random, time
+from time import time
+from time import sleep
+
+air = 0
+grass = 2
+dirt = 3
+water = 8
+water_stationary = 9
+lava = 10
+lava_stationary = 11
+gravel = 13
+wood = 17
+leaves = 18
+glass = 20
+cobweb = 30
+obsidian = 49
+glass_pane = 102
+
+def earthquake(startx, startz):
+    
+    mc.postToChat('Earthquake!')
+    
+    y = mc.getHeight(startx, startz) 
+    endtime = time() + 30
+    nearthtime = time()
+    
+    while endtime > time():
+        
+        if time() > nearthtime:
+            nearthtime = time() + 5
+        
+        x, y, z = mc.player.getPos()
+        
+        if x < x + 15 and x > x - 15:
+            if y < y + 15 and y > -60:
+                if z < z + 15 and z > z - 15:
+                    mc.player.setPos(x, y, z)
+        
+        bx = random.randint(startx-15, startx+15)
+        by = y
+        bz = random.randint(startz-15, startz+15)
+        
+        if mc.getHeight(bx, bz) > -50:
+            by = mc.getHeight(bx, bz)
+        
+        if mc.getBlock(bx, by, bz) in [glass, glass_pane]:
+            mc.setBlock(bx, by, bz, air)
+            continue
+        
+        mc.setBlock(bx, by, bz, gravel)
+        
+        mc.setBlocks(bx, by - 1, bz, bx, -60, bz, air)
+
+def sinkhole(x, z):
+    
+    mc.postToChat('Sinkhole!')
+    blks = []
+    y = mc.getHeight(x, z)
+    xdist = random.randint(1, 5)
+    
+    for bx in range(-xdist, xdist+1):
+        zdist = random.randint(1, 5)
+        for bz in range(-zdist, zdist+1):
+            blks.append([x + bx, z + bz])
+    
+    for blk in blks:
+        mc.setBlocks(blk[0], mc.getHeight(blk[0], blk[1]), blk[1], blk[0],-60, blk[1], air)
+        mc.setBlocks(blk[0], -55, blk[1], blk[0], -60, blk[1], lava)
+    
+    for blk in blks:
+        mc.setBlock(blk[0], y, blk[1], gravel)
+
+def geyser(x, z):
+    
+    mc.postToChat('Geyser!')
+    y = mc.getHeight(x, z)
+    mc.setBlocks(x-2, y+5, z-2, x+2, -60, z+2, water)
+    sleep(15)
+    mc.setBlocks(x-2, y+5, z-2, x+2, -60, z+2, air)
+
+def eruption(x, z):
+    
+    mc.postToChat('Eruption!')
+    y = mc.getHeight(x, z)
+    
+    for i in range(3):
+        mc.setBlocks(x-2, y+9, z-2, x+2, y+9, z+2, lava)
+        sleep(15)
+        mc.setBlocks(x-2, y+10, z-2, x+2, y+10, z+2, water)
+        sleep(5)
+        mc.setBlocks(x-2, y+10, z-2, x+2, y+10, z+2, air)
+        sleep(5)
+        y += 1
+    
+def meteor(x, z):
+    
+    mc.postToChat('Meteor approaching!')
+    
+    y = 64
+    h = mc.getHeight(x, z)
+    x -= (64 - h)
+    
+    while y > h:
+        y -= 1
+        x += 1
+        mc.setBlocks(x - 2, y - 2, z - 2, x + 2, y + 2, z + 2, obsidian)
+        sleep(0.1)
+        mc.setBlocks(x - 2, y - 2, z - 2, x + 2, y + 2, z + 2, air)
+    mc.setBlocks(x - 2, y - 2, z - 2, x + 2, y + 2, z + 2, lava)
+    mc.setBlocks(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1, obsidian)
+
+def meteor_shower(x, z):
+    
+    mc.postToChat('Meteor shower!')
+    
+    for i in range(10):
+        mx = random.randint(x-15, x+15)
+        mz = random.randint(z-15, z+15)
+        meteor(mx, mz)
+
+def tsunami(x, z):
+    
+    mc.postToChat('Tsunami!')
+    
+    tend = time() + 15
+    tx = x
+    
+    while time() < tend:
+        h = mc.getHeight(tx, z)
+        
+        mc.setBlocks(tx, h-5, z-5, tx, h+5, z+5, water)
+        sleep(0.1)
+        
+        mc.setBlocks(tx, h-5, z-5, tx, h+5, z+5, air)
+        sleep(0.1)
+        
+        tx += 1
+    
+    hm = 5
+    
+    while hm > -1:
+        h = mc.getHeight(tx, z)
+        mc.setBlocks(tx, h - int(hm), z - 5, tx, h + int(hm), z + 5, water)
+        sleep(0.1)
+        mc.setBlocks(tx, h - int(hm), z - 5, tx, h + int(hm), z + 5, air)
+        sleep(0.1)
+        tx += 1
+        hm -= 0.2
+
+disasters = [tsunami, meteor, meteor_shower, geyser, earthquake, sinkhole]
+
+def main(disasters, mc):
+    
+    while True:
+        
+        disaster = random.choice(disasters)
+        x, y , z = mc.player.getTilePos()
+        mc.postToChat('Disaster in')
+        for c in range(5, 0, -1):
+            mc.postToChat(str(c))
+            sleep(0.5)
+        disaster(x, z)
+        
+        sleep(10)
+
+main(disasters, mc)
